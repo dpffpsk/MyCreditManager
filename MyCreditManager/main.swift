@@ -7,6 +7,8 @@
 
 import Foundation
 
+let userDefaults = UserDefaults.standard
+let userDefaultsKey = "student"
 let functions = [1, 2, 3, 4, 5]
 let score: [String: Double] = ["A+": 4.5,
                             "A": 4,
@@ -24,6 +26,12 @@ while true {
 
     if let functioninput = readLine(), !functioninput.isEmpty {
         if let number = Int(functioninput), functions.contains(number) {
+            switch number {
+            case 1:
+                addStudent()
+            default:
+                print("")
+            }
             continue
         } else if functioninput == "X" {
             print("프로그램을 종료합니다...")
@@ -32,3 +40,30 @@ while true {
     }
     print("뭔가 입력이 잘못되었습니다. 1~5 사이의 숫자 혹은 X를 입력해주세요.")
 }
+
+
+// 학생 추가
+func addStudent() {
+    print("추가할 학생의 이름을 입력해주세요")
+
+    var temp = [String: [String: String]]()
+    if let studentInput = readLine(), !studentInput.isEmpty {
+        // UserDefaults_student가 존재하는 경우
+        if var studentList = userDefaults.dictionary(forKey: userDefaultsKey) as? [String: [String: String]] {
+            if studentList.keys.contains(studentInput) { // student에 input 값이 존재하는 경우
+                print("\(studentInput)은 이미 존재하는 학생입니다. 추가하지 않습니다.")
+            } else { // student에 input 값이 존재하지 않는 경우
+                studentList.updateValue([:], forKey: studentInput)
+                userDefaults.set(studentList, forKey: userDefaultsKey)
+                print("\(studentInput) 학생을 추가했습니다.")
+            }
+        } else { // UserDefaults_student가 존재하지 않는 경우
+            temp.updateValue([:], forKey: studentInput)
+            userDefaults.set(temp, forKey: userDefaultsKey)
+            print("\(studentInput) 학생을 추가했습니다.")
+        }
+        return
+    }
+    print("입력이 잘못되었습니다. 다시 확인해주세요.")
+}
+
