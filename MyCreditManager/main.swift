@@ -33,6 +33,8 @@ while true {
                 deleteStudent()
             case 3:
                 addScore()
+            case 4:
+                deleteScore()
             default:
                 print("")
             }
@@ -112,6 +114,35 @@ func addScore() {
                     userDefaults.set(studentList, forKey: userDefaultsKey)
                     
                     print("\(student) 학생의 \(subject) 과목이 \(score)로 추가(변경)되었습니다.")
+                    return
+                } else {
+                    print("\(student) 학생을 찾지 못했습니다.")
+                    return
+                }
+            }
+        }
+    }
+    print("입력이 잘못되었습니다. 다시 확인해주세요.")
+}
+
+// 성적 삭제
+func deleteScore() {
+    print("성적을 삭제할 학생의 이름, 과목 이름을 띄어쓰기로 구분하여 차례로 작성해주세요.")
+    print("입력예) Mickey Swift")
+    
+    if let studentInput = readLine()?.split(separator: " "), !studentInput.isEmpty {
+        // input 값이 2개 입력된 경우(공백 기준)
+        if studentInput.count == 2 {
+            let student = String(studentInput[0])
+            let subject = String(studentInput[1])
+            
+            // UserDefaults_student가 존재하는 경우
+            if var studentList = userDefaults.dictionary(forKey: userDefaultsKey) as? [String: [String: String]] {
+                if studentList.keys.contains(student) {
+                    studentList[student]?.removeValue(forKey: subject)
+                    userDefaults.set(studentList, forKey: userDefaultsKey)
+                    
+                    print("\(student) 학생의 \(subject) 과목의 성적이 삭제되었습니다.")
                     return
                 } else {
                     print("\(student) 학생을 찾지 못했습니다.")
