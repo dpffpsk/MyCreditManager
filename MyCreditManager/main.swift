@@ -35,6 +35,8 @@ while true {
                 addScore()
             case 4:
                 deleteScore()
+            case 5:
+                showAverage()
             default:
                 print("")
             }
@@ -148,6 +150,33 @@ func deleteScore() {
                     print("\(student) 학생을 찾지 못했습니다.")
                     return
                 }
+            }
+        }
+    }
+    print("입력이 잘못되었습니다. 다시 확인해주세요.")
+}
+
+// 평점 보기
+func showAverage() {
+    print("평점을 알고싶은 학생의 이름을 입력해주세요")
+    var average = 0.0
+    
+    if let studentInput = readLine(), !studentInput.isEmpty {
+        // UserDefaults_student가 존재하는 경우
+        if let studentList = userDefaults.dictionary(forKey: userDefaultsKey) as? [String: [String: String]] {
+            // student에 input 값이 존재하는 경우
+            if studentList.keys.contains(studentInput), let subject = studentList[studentInput] {
+                for (key, val) in subject {
+                    print("\(key): \(val)")
+                    average += score[val] ?? 0.0
+                }
+                average = average / Double(subject.count)
+                print("평점 : \(String(format: "%.2f", average))")
+                return
+                
+            } else {
+                print("\(studentInput) 학생을 찾지 못했습니다.")
+                return
             }
         }
     }
