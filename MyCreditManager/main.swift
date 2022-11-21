@@ -29,6 +29,8 @@ while true {
             switch number {
             case 1:
                 addStudent()
+            case 2:
+                deleteStudent()
             default:
                 print("")
             }
@@ -67,3 +69,23 @@ func addStudent() {
     print("입력이 잘못되었습니다. 다시 확인해주세요.")
 }
 
+// 학생 삭제
+func deleteStudent() {
+    print("삭제할 학생의 이름을 입력해주세요")
+
+    if let studentInput = readLine(), !studentInput.isEmpty {
+        // UserDefaults_student가 존재하는 경우
+        if var studentList = userDefaults.dictionary(forKey: userDefaultsKey) as? [String: [String: String]] {
+            // student에 input 값이 존재하는 경우
+            if studentList.keys.contains(studentInput) {
+                studentList.removeValue(forKey: studentInput)
+                userDefaults.set(studentList, forKey: userDefaultsKey)
+                print("\(studentInput) 학생을 삭제하였습니다.")
+                return
+            }
+        }
+        print("\(studentInput) 학생을 찾지 못했습니다.")
+        return
+    }
+    print("입력이 잘못되었습니다. 다시 확인해주세요.")
+}
